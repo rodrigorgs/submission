@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test</title>
+</head>
+<body>
+  
+  base url: <input type="text" id="url" value="http://localhost:8080/"><br>
+  username: <input type="text" id="username" value="test"><br>
+  password: <input type="text" id="password" value="0329a0"><br>
+  <button onclick="submitLogin();">Submit</button>
+
+  <hr>
+
+  token: <input type="text" id="token"><br>
+  <button onclick="submitAnswers();">Submit</button>
+
+  <hr>
+
+  <div id="result"></div>
+
+  <script>
+    function submitLogin() {
+      const url = document.getElementById('url').value + "login.php";
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const data = { username, password };
+
+      fetch(url, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(data)
+      }).then(res => {
+        console.log(res);
+        return res.text();
+      }).then(text => {
+        console.log("text", text);
+        document.getElementById('token').value = text;
+      });
+    }
+
+    function submitAnswers() {
+      const url = document.getElementById('url').value + "submit.php";
+      const token = document.getElementById('token').value.trim();
+      console.log('token value', token);
+      const data = {
+          "answers": "abcd"
+      };
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(data)
+      }).then(res => {
+        console.log("Request complete! response:", res);
+        return res.text();
+      }).then(text => {
+        console.log("Text", text);
+        document.getElementById('result').innerHTML = text;
+      });
+      
+      // var xhr = new XMLHttpRequest();
+      // xhr.open("POST", yourUrl, true);
+      // xhr.setRequestHeader('Content-Type', 'application/json');
+      // xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      // xhr.send(JSON.stringify({
+      //     "answers": "abcd"
+      // }));
+    }
+  </script>
+
+</body>
+</html>
