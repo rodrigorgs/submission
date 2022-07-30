@@ -16,4 +16,6 @@ $DB_PORT = 3306;
 $DB_USER = "root";
 $DB_PASSWORD = "root";
 $DB_DATABASE = "db";
+
+$DEBUG = true;
 ?>

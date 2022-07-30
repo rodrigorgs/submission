@@ -1,4 +1,10 @@
 <?php
+  if ($DEBUG) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+  }
+
   if (php_sapi_name() != "cli") {
     cors();
   }
@@ -9,6 +15,18 @@
 	use Firebase\JWT\JWT;
 	use Firebase\JWT\Key;
   use Firebase\JWT\ExpiredException;
+
+  function getPasswordForUser($username) {
+    global $PASSWORD_GENERATOR_ALGORITHM,
+      $PASSWORD_GENERATOR_SECRET,
+      $PASSWORD_GENERATOR_LENGTH;
+    $correct_password = hash_hmac($PASSWORD_GENERATOR_ALGORITHM,
+				$username,
+				$PASSWORD_GENERATOR_SECRET,
+				false);
+		$correct_password = substr($correct_password, 0, $PASSWORD_GENERATOR_LENGTH);
+    return $correct_password;
+  }
 
   /** 
    * Get header Authorization

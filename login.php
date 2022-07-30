@@ -13,11 +13,7 @@
 	if ($username == $ADMIN_USERNAME) {
 		$correct_password = $ADMIN_PASSWORD;
 	} else {
-		$correct_password = hash_hmac($PASSWORD_GENERATOR_ALGORITHM,
-				$username,
-				$PASSWORD_GENERATOR_SECRET,
-				false);
-		$correct_password = substr($correct_password, 0, $PASSWORD_GENERATOR_LENGTH);
+		$correct_password = getPasswordForUser($username);
 	}
 
 	// Verify password and return JWT token

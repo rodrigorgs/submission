@@ -38,6 +38,7 @@ mysql> USE db;
 mysql> SHOW TABLES;
 ```
 
+Atenção: em alguns ambientes, é necessário copiar o arquivo `.htaccess`.
 ## Usando a API
 
 
