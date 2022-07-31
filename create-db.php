@@ -24,11 +24,12 @@
    */
   mysqli_query($conn, "CREATE TABLE IF NOT EXISTS submissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    assignment_url VARCHAR(1024) NOT NULL,
-    username VARCHAR(64) NOT NULL,
+    assignment_url VARCHAR(256) NOT NULL,
+    username VARCHAR(32) NOT NULL,
     answer TEXT,
     question_index INTEGER,
     question_type VARCHAR(16),
+    submission_type VARCHAR(16),
     timestamp DATETIME
   );");
 
@@ -45,5 +46,7 @@
   } catch (mysqli_sql_exception $e) {
     // Ignore if index already exists.
   }
+
+  $conn->close();
 
 ?>
