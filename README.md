@@ -27,7 +27,7 @@ php create-db.php
 Inicie a aplicação:
 
 ```bash
-php -S localhost:8080 .
+php -S localhost:8080
 ```
 
 Se precisar acessar o banco de dados:
