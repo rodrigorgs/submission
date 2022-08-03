@@ -23,6 +23,9 @@
 			"iat" => time(),
 			"exp" => time() + $JWT_DURATION
 		);
+		if ($username == $ADMIN_USERNAME) {
+			$payload["admin"] = true;
+		}
 		$jwt = JWT::encode($payload, $JWT_KEY, $JWT_ALGORITHM);
 		print_r($jwt);
 	} else {

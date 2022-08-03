@@ -104,4 +104,86 @@
         exit(0);
     }
   }
+
+  function getCurrentQuestionIndex($conn, $assignment_url) {
+    $sql = $conn->prepare("SELECT question_index
+        FROM sub_assignment_control
+        WHERE assignment_url = ?
+        AND is_open = TRUE
+        AND expiration_time > NOW();");
+    $sql->bind_param("s", $assignment_url);
+    $sql->execute();
+    $result = $sql->get_result();
+    if (($result) && ($result->num_rows !== 0)) {
+      $row = $result->fetch_assoc();
+      return $row["question_index"];
+    } else {
+      return NULL;
+    }
+  }
+
+  function getNextQuestionIndex($conn, $assignment_url) {
+    $sql = $conn->prepare("SELECT question_index
+        FROM sub_assignment_control
+        WHERE assignment_url = ?");
+    $sql->bind_param("s", $assignment_url);
+    $sql->execute();
+    $result = $sql->get_result();
+    if (($result) && ($result->num_rows !== 0)) {
+      $row = $result->fetch_assoc();
+      return $row["question_index"] + 1;
+    } else {
+      return 0;
+    }
+  }
+
+  function openNextQuestion($conn, $assignment_url) {
+    global $JWT_DURATION;
+    $nextQuestion = getNextQuestionIndex($conn, $assignment_url);
+    if ($nextQuestion != 0) {
+      $sql = $conn->prepare("UPDATE sub_assignment_control
+          SET question_index = $nextQuestion,
+          is_open = TRUE,
+          expiration_time = DATE_ADD(NOW(), INTERVAL $JWT_DURATION SECOND)
+          WHERE assignment_url = ?");
+      $sql->bind_param("s", $assignment_url);
+      $sql->execute();
+    } else {
+      $sql = $conn->prepare("
+          INSERT INTO sub_assignment_control (assignment_url, question_index, expiration_time, is_open)
+          VALUES (?, 0, DATE_ADD(NOW(), INTERVAL $JWT_DURATION SECOND), TRUE);");
+      $sql->bind_param("s", $assignment_url);
+      $sql->execute();
+    }
+  }
+
+  function closeCurrentQuestion($conn, $assignment_url) {
+    $sql = $conn->prepare("
+        UPDATE sub_assignment_control
+        SET is_open = FALSE
+        WHERE assignment_url = ?");
+    $sql->bind_param("s", $assignment_url);
+    $sql->execute();
+  }
+
+  function addSubmission($conn, $timestamp, $assignment_url, $username, $single_answer, $question_index, $question_type, $submission_type) {
+    $sql = $conn->prepare("INSERT INTO sub_submissions (
+      timestamp,
+      assignment_url,
+      username,
+      answer,
+      question_index,
+      question_type,
+      submission_type)
+      VALUES (?, ?, ?, ?, ?, ?, ?);");
+    $sql->bind_param("ssssiss", 
+      $timestamp,
+      $assignment_url,
+      $username,
+      $single_answer,
+      $question_index,
+      $question_type,
+      $submission_type);
+    $result = $sql->execute();
+  }
 ?>

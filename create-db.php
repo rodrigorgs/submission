@@ -18,14 +18,10 @@
     exit;
   }
 
-  /*
-   * If question is NULL, answer is the answer as string.
-   * If question is not NULL, answer is the answers as a JSON-encoded array.
-   */
-  mysqli_query($conn, "CREATE TABLE IF NOT EXISTS submissions (
+  mysqli_query($conn, "CREATE TABLE IF NOT EXISTS sub_submissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     assignment_url VARCHAR(256) NOT NULL,
-    username VARCHAR(32) NOT NULL,
+    username VARCHAR(32),
     answer TEXT,
     question_index INTEGER,
     question_type VARCHAR(16),
@@ -35,14 +31,29 @@
 
   try {
     mysqli_query($conn, 
-      "CREATE INDEX idx_assignment_url ON submissions(assignment_url);");
+      "CREATE INDEX idx_assignment_url ON sub_submissions(assignment_url);");
   } catch (mysqli_sql_exception $e) {
     // Ignore if index already exists.
   }
 
   try {
     mysqli_query($conn, 
-      "CREATE INDEX idx_username_assignment_url ON submissions(assignment_url, username);");
+      "CREATE INDEX idx_username_assignment_url ON sub_submissions(assignment_url, username);");
+  } catch (mysqli_sql_exception $e) {
+    // Ignore if index already exists.
+  }
+
+  mysqli_query($conn, "CREATE TABLE IF NOT EXISTS sub_assignment_control (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    assignment_url VARCHAR(256) NOT NULL,
+    expiration_time DATETIME NOT NULL,
+    is_open BOOLEAN NOT NULL DEFAULT TRUE,
+    question_index INT NOT NULL DEFAULT 0
+  );");
+
+  try {
+    mysqli_query($conn, 
+      "CREATE INDEX idx_assignment_control_url ON sub_assignment_control(assignment_url);");
   } catch (mysqli_sql_exception $e) {
     // Ignore if index already exists.
   }
