@@ -189,4 +189,27 @@
       $submission_type);
     $result = $sql->execute();
   }
+
+  function getAnswerCount($conn, $assignment_url) {
+    $sql = $conn->prepare("
+    SELECT answer, COUNT(*) AS count
+    FROM `sub_submissions`
+    WHERE `assignment_url` = ?
+    AND `question_index` = (
+      SELECT MAX(question_index) FROM sub_submissions
+      WHERE `assignment_url` = ?)
+    GROUP BY answer
+    ORDER BY answer;
+    ");
+    $sql->bind_param("ss", $assignment_url, $assignment_url);
+    $sql->execute();
+    $result = $sql->get_result();
+
+    $rows = array();
+    while($row = $result->fetch_assoc()) {
+      $rows[] = $row;
+    }
+
+    return $rows;
+  }
 ?>
