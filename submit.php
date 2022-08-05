@@ -12,6 +12,7 @@
   // Connect to the database
   $conn = mysqli_connect($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_DATABASE, $DB_PORT);
   if (!$conn) {
+    http_response_code(500);
     die('Erro de banco de dados: ' . mysqli_connect_error());
   }
   mysqli_query($conn, "SET NAMES 'utf8'");
@@ -19,6 +20,7 @@
   $username = getUsernameFromToken();
   if ($username == $ADMIN_USERNAME) {
     if ($question_type != "control") {
+      http_response_code(422);
       die("Only control submissions are allowed");
     }
 
@@ -28,6 +30,7 @@
     } else if ($answer == "close") {
       closeCurrentQuestion($conn, $assignment_url);
     } else {
+      http_response_code(422);
       die("Invalid answer. Must be open or close.");
     }
   } else if ($question_type == "clicker") {
@@ -35,10 +38,11 @@
     error_log("Anonymous or no index; current q = $question_index");
     if (is_null($question_index)) {
       error_log("No open questions");
+      http_response_code(500);
       die("No open questions.");
     } else {
       error_log("Will add submission");
-      addSubmission(conn: $conn, timestamp: $timestamp, assignment_url: $assignment_url, username: $username, single_answer: $answer, question_index: $question_index, question_type: $question_type, submission_type: $submission_type);
+      addSubmission($conn, $timestamp, $assignment_url, $username, $answer, $question_index, $question_type, $submission_type);
       error_log("Did add submission");
     }
   } else {
@@ -53,7 +57,7 @@
       
       foreach ($all_answers as $single_answer) {
         error_log("question_index " . $question_index);
-        addSubmission(conn: $conn, timestamp: $timestamp, assignment_url: $assignment_url, username: $username, single_answer: $single_answer, question_index: $question_index, question_type: $question_type, submission_type: $submission_type);
+        addSubmission($conn, $timestamp, $assignment_url, $username, $single_answer, $question_index, $question_type, $submission_type);
   
         $question_index++;
       }

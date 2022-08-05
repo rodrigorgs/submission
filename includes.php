@@ -1,16 +1,19 @@
 <?php
+  if (php_sapi_name() != "cli") {
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+      http_response_code(200);
+      exit(0);
+    }
+  }
+
+  require_once __DIR__ . '/vendor/autoload.php';
+  require_once __DIR__ . '/settings.php';
+  
   if (isset($DEBUG) && $DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
   }
-
-  if (php_sapi_name() != "cli") {
-    cors();
-  }
-
-  require_once __DIR__ . '/vendor/autoload.php';
-  require_once __DIR__ . '/settings.php';
 
 	use Firebase\JWT\JWT;
 	use Firebase\JWT\Key;
