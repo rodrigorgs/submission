@@ -27,9 +27,14 @@ php create-db.php
 Inicie a aplicação:
 
 ```bash
+php -S localhost:8080
+```
+
+<!-- 
+```bash
 docker-compose build
 docker-compose up
-```
+``` -->
 
 A API rodará em `http://localhost:8080/`.
 

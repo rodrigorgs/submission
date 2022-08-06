@@ -5,7 +5,7 @@
   $question_index = $data["question_index"] ?? 0;
   $question_type = $data["question_type"];
   $answer = $data["answer"];
-  $submission_type = $data["submission_type"];
+  $submission_type = $data["submission_type"] ?? NULL;
   $assignment_url = $data["assignment_url"] ?? $_SERVER['HTTP_REFERER'];
   $timestamp = (new DateTime())->format('Y-m-d H:i:s.u');
 
@@ -38,7 +38,7 @@
     error_log("Anonymous or no index; current q = $question_index");
     if (is_null($question_index)) {
       error_log("No open questions");
-      http_response_code(500);
+      http_response_code(403);
       die("No open questions.");
     } else {
       error_log("Will add submission");

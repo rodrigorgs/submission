@@ -1,9 +1,6 @@
 <?php
   if (php_sapi_name() != "cli") {
-    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-      http_response_code(200);
-      exit(0);
-    }
+    cors();
   }
 
   require_once __DIR__ . '/vendor/autoload.php';
