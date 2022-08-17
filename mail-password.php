@@ -1,9 +1,8 @@
 <?php
-  /*
-   * Can be run from the command line or from a web browser.
-   * If run from a web browser, needs to be run with a valid JWT token
-   * for the admin user.
-   */
+  use PHPMailer\PHPMailer\PHPMailer;
+  use PHPMailer\PHPMailer\SMTP;
+  use PHPMailer\PHPMailer\Exception;
+  
   require_once __DIR__ . '/includes.php';
 
   $requester = getUsernameFromToken();
@@ -19,7 +18,7 @@
   $dryRun = $data["dryRun"] ?? false;
   $subject = $data["subject"] ?? "Password for submissions";
   $message = $data["message"] ?? "Your password is: %password%";
-  $from = $data["from"] ?? "admin@example.com";
+  $replyTo = $data["replyTo"] ?? "admin@example.com";
 
   header('Content-Type: text/csv');
 
@@ -27,14 +26,34 @@
   foreach ($pairs as $username => $email) {
     $password = getPasswordForUser($username);
     echo "$password\r\n";
+
     if (!$dryRun) {
       $to      = $email;
       $body = str_replace("%password%", $password, $message);
-      $headers = "From: $from"       . "\r\n" .
-                   "Reply-To: $from" . "\r\n" .
-                   "X-Mailer: PHP/" . phpversion();
 
-      mail($to, $subject, $body, $headers);
+      $mail = new PHPMailer(true);
+      try {
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host       = $MAIL_HOST;
+        $mail->Port       = $MAIL_PORT;
+        $mail->SMTPAuth   = $MAIL_SMTP_AUTH;
+        $mail->Username   = $MAIL_USERNAME;
+        $mail->Password   = $MAIL_PASSWORD;
+        if ($MAIL_SMTP_SECURE) {
+          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        }
+
+        $mail->setFrom($MAIL_USERNAME);
+        $mail->addAddress($to);
+        $mail->addReplyTo($replyTo);
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+
+        $mail->send();
+      } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+      }
     }
   }
 ?>

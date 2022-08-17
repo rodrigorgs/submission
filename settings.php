@@ -18,4 +18,12 @@ $DB_PASSWORD = "root";
 $DB_DATABASE = "db";
 
 $DEBUG = true;
+
+$MAIL_HOST = "smtps.example.com";
+$MAIL_PORT = 25;
+$MAIL_SMTP_AUTH = false;
+$MAIL_USERNAME = "admin@example.com";
+$MAIL_PASSWORD = "123456";
+$MAIL_SMTP_SECURE = false;
+
 ?>
