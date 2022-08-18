@@ -30,6 +30,7 @@
     if (!$dryRun) {
       $to      = $email;
       $body = str_replace("%password%", $password, $message);
+      $body = str_replace("%username%", $username, $body);
 
       $mail = new PHPMailer(true);
       try {
