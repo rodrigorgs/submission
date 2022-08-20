@@ -5,7 +5,7 @@
   header('Content-Disposition: inline');
 
   $assignment_url = $_GET["url"];
-  $submission_type = $_GET["submission_type"] ?? null;
+  $submission_type = $_GET["submission_type"] ?? "batch";
 
   // Connect to the database
   $conn = mysqli_connect($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_DATABASE, $DB_PORT);
@@ -15,23 +15,15 @@
   }
   mysqli_query($conn, "SET NAMES 'utf8'");
 
-  $query_string = "
+  $sql = $conn->prepare("
   SELECT username, question_index
   FROM `sub_submissions`
-  WHERE `assignment_url` = ?";
-  if ($submission_type) {
-    $query_string .= " AND `submission_type` = ?";
-  }
-  $query_string .= "
+  WHERE `assignment_url` = ?
+  AND `submission_type` = ?
   GROUP BY username, question_index
   ORDER BY username, question_index
-  ";
-  $sql = $conn->prepare($query_string);
-  if ($submission_type) {
-    $sql->bind_param("ss", $assignment_url, $submission_type);
-  } else {
-    $sql->bind_param("s", $assignment_url);
-  }
+  ");
+  $sql->bind_param("ss", $assignment_url, $submission_type);
   $sql->execute();
   $result = $sql->get_result();
 
