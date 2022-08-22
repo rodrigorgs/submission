@@ -27,15 +27,14 @@
   $sql = $conn->prepare("
   SELECT answer
   FROM `sub_submissions`
-  WHERE `submission_type` = 'batch'
+  WHERE `submission_type` LIKE ?
   AND `assignment_url` = ?
   AND `username` = ?
   AND `question_index` = ?
-  AND `submission_type` = ?
   ORDER BY timestamp DESC
   LIMIT 1;
   ");
-  $sql->bind_param("ssis", $assignment_url, $username, $question_index, $submission_type);
+  $sql->bind_param("sssi", $submission_type, $assignment_url, $username, $question_index);
   $sql->execute();
   $result = $sql->get_result();
 
