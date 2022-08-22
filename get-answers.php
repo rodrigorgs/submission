@@ -4,9 +4,11 @@
   header('Content-Type: application/json; charset=utf-8');
   
   $requesting_username = getUsernameFromToken();
-  $assignment_url = $_GET["url"];
-  $username = $_GET["username"] ?? $requesting_username;
-  $submission_type = $_GET["submission_type"] ?? "batch";
+
+  $data = json_decode(file_get_contents('php://input'), true);
+  $assignment_url = $data["assignment_url"];
+  $username = $data["username"] ?? $requesting_username;
+  $submission_type = $data["submission_type"] ?? "batch";
 
   if ($requesting_username != $ADMIN_USERNAME && $username != $requesting_username) {
     http_response_code(403);
