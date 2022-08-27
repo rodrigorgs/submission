@@ -38,8 +38,6 @@
   if ($mime == 'text/html') {
     header('Content-Type: text/html');
     echo "$assignment_url<br>";
-    echo "submission_type: $submission_type<br>";
-    echo "token: " . getBearerToken() . "<br><br>";
     echo "<table border=\"1\">";
     
     foreach ($usernames as $username) {
