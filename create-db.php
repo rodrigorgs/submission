@@ -26,7 +26,8 @@
     question_index INTEGER,
     question_type VARCHAR(16),
     submission_type VARCHAR(16),
-    timestamp DATETIME
+    timestamp DATETIME,
+    score DECIMAL(4, 3)
   );");
 
   try {

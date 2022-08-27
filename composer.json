@@ -1,6 +1,7 @@
 {
     "require": {
         "firebase/php-jwt": "^6.3",
-        "phpmailer/phpmailer": "^6.6"
+        "phpmailer/phpmailer": "^6.6",
+        "jakezatecky/array_group_by": "^2.0"
     }
 }

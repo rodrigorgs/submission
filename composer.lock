@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46f0137aee371f2889d024d316a582d6",
+    "content-hash": "6cc977a3c13bb76b8e2e1c4fdea06687",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -67,6 +67,56 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.3.0"
             },
             "time": "2022-07-15T16:48:45+00:00"
+        },
+        {
+            "name": "jakezatecky/array_group_by",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jakezatecky/array_group_by.git",
+                "reference": "275dd3e774aeff9fb8745727dd13c9f9400405c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jakezatecky/array_group_by/zipball/275dd3e774aeff9fb8745727dd13c9f9400405c3",
+                "reference": "275dd3e774aeff9fb8745727dd13c9f9400405c3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0.6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/array_group_by.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jake Zatecky"
+                }
+            ],
+            "description": "A function that groups/splits an array by the values of a given key or keys.",
+            "homepage": "https://github.com/jakezatecky/array_group_by",
+            "keywords": [
+                "array",
+                "array_group_by",
+                "array_key_split",
+                "group",
+                "split"
+            ],
+            "support": {
+                "issues": "https://github.com/jakezatecky/array_group_by/issues",
+                "source": "https://github.com/jakezatecky/array_group_by"
+            },
+            "time": "2017-10-07T18:50:43+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
