@@ -16,6 +16,8 @@
 	use Firebase\JWT\Key;
   use Firebase\JWT\ExpiredException;
 
+  JWT::$leeway = $JWT_LEEWAY ?? 15 * 60; // $leeway in seconds
+
   function getPasswordForUser($username) {
     global $PASSWORD_GENERATOR_ALGORITHM,
       $PASSWORD_GENERATOR_SECRET,

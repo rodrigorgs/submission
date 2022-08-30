@@ -26,4 +26,6 @@ $MAIL_USERNAME = "admin@example.com";
 $MAIL_PASSWORD = "123456";
 $MAIL_SMTP_SECURE = false;
 
+$JWT_LEEWAY = 15 * 60;
+
 ?>
